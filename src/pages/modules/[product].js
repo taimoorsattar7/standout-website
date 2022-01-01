@@ -20,7 +20,7 @@ export default function ModulePrd({ location, params, slug }) {
           title,
           exerpt,
           'documents': documents[].asset->{
-            url
+            url, originalFilename
           },
         }
       `)

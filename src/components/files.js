@@ -47,7 +47,7 @@ export default function Files({ data }) {
                           aria-hidden="true"
                         />
                         <span className="ml-2 flex-1 w-0 truncate">
-                          resume_back_end_developer.pdf
+                          {doc.originalFilename}
                         </span>
                       </div>
                       <div className="ml-4 flex-shrink-0">

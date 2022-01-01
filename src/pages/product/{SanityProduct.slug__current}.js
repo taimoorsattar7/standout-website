@@ -12,7 +12,7 @@ export default function SingleProductPage({
 }) {
   return (
     <>
-      <Layout location={location} title="Contact Me">
+      <Layout location={location}>
         <Seo title="All posts" />
         <SingleProduct data={sanityProduct} location={location} />
       </Layout>
@@ -35,6 +35,7 @@ export const query = graphql`
         _id
         priceID
         content {
+          _id
           slug {
             current
           }

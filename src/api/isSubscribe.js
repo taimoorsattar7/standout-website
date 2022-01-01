@@ -2,15 +2,14 @@ import Axios from "axios"
 import validator from "validator"
 import jwt from "jsonwebtoken"
 
-export default async function handler(
-  req,
-  res
-) {
+import { querySanity } from "../lib/querySanity"
+
+export default async function handler(req, res) {
   try {
     const token =
       req.body.token || req.query.token || req.headers["x-access-token"]
 
-    const productRef = req.body.productRef || req.query.productRef
+    const contentRef = req.body.contentRef || req.query.contentRef
 
     if (!token) {
       return res.status(403).send("A token is required for authentication")
@@ -25,16 +24,13 @@ export default async function handler(
       }
     }
 
-    let response = await Axios.post(
-      `https://${process.env.GATSBY_SANITY_PROJECT_ID}.api.sanity.io/v2021-06-07/data/query/${process.env.GATSBY_SANITY_DATASET}`,
-      {
-        query: `*[_type == 'subscriptions' && customer._ref in *[_type=='customer' && email=='${decoded.email}']._id]{price->{_id, content}}`,
-      }
-    )
+    let subData = await querySanity(`
+      *[_type == 'subscriptions' && customer._ref in *[_type=='customer' && email=='${decoded.email}']._id]{price->{_id, content}}
+    `)
 
-    if (response.data.result[0].price.content._ref == productRef) {
+    if (subData.price.content._ref == contentRef) {
       res.status(200).json({
-        refid: response.data.result[0].price.content._ref,
+        refid: subData.price.content._ref,
         is: true,
         message: "success",
       })
