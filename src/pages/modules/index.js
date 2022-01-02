@@ -6,9 +6,8 @@ import Layout from "@components/layout"
 import Seo from "@components/seo"
 
 import { navigate } from "gatsby"
-import Axios from "axios"
 
-import { isLoggedIn, getCurrentUser, logout } from "@utils/auth"
+import { isLoggedIn, getCurrentUser } from "@utils/auth"
 
 import ProductList from "@components/productList"
 
@@ -47,8 +46,6 @@ export default function Modules({ location, params, slug }) {
           role="status"
         ></div>
       </div>
-
-      {JSON.stringify(content)}
 
       {content && <ProductList data={content.module} />}
     </Layout>

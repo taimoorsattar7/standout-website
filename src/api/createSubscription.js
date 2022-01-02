@@ -10,7 +10,7 @@ import { sendEmailSG } from "../lib/sendEmailSG"
 
 import { formatDate } from "../lib/formatDate"
 
-import { createSubscription } from "../lib/sanity/createSubscription"
+import { mutateSanity } from "../lib/sanity/mutateSanity"
 
 import { unix_timestamp_data } from "../lib/unix_timestamp_data"
 
@@ -46,28 +46,55 @@ export default async function handler(req, res) {
         password = cusData?.password
       }
 
-      let mutationData = {
-        cusid: cusData?._id ? cusData?._id : isSubscribe.cusid,
-        email: email,
-        password: password,
-        name: name,
-        subid: isSubscribe.subid,
-        priceRef: priceRef,
-        start_date: isSubscribe.start_date
-          ? formatDate(unix_timestamp_data(isSubscribe.start_date))
-          : "",
-        status: isSubscribe?.status,
-        cancel_at_period_end: isSubscribe.cancel_at_period_end,
-        canceled_at: isSubscribe?.canceled_at
-          ? formatDate(unix_timestamp_data(isSubscribe?.canceled_at))
-          : "",
-        cancel_at: isSubscribe?.cancel_at
-          ? formatDate(unix_timestamp_data(isSubscribe?.cancel_at))
-          : "",
-        livemode: isSubscribe?.livemode,
-      }
+      let cusRef = cusData?._id ? cusData?._id : isSubscribe.cusid
 
-      let results = await createSubscription(mutationData)
+      let mutationRequest = [
+        {
+          createIfNotExists: {
+            _id: cusRef,
+            _type: "customer",
+            email: email,
+            password: password,
+            name: name,
+            cusid: cusRef,
+          },
+        },
+        {
+          createIfNotExists: {
+            _type: "subscriptions",
+            _id: isSubscribe.subid,
+            customer: {
+              _ref: cusRef,
+              _type: "reference",
+            },
+            price: {
+              _ref: priceRef,
+              _type: "reference",
+            },
+
+            status: isSubscribe?.status,
+            cancel_at_period_end: isSubscribe.cancel_at_period_end,
+            canceled_at: isSubscribe?.canceled_at
+              ? formatDate(unix_timestamp_data(isSubscribe?.canceled_at))
+              : "",
+            cancel_at: isSubscribe?.cancel_at
+              ? formatDate(unix_timestamp_data(isSubscribe?.cancel_at))
+              : "",
+            start_date: isSubscribe.start_date
+              ? formatDate(unix_timestamp_data(isSubscribe.start_date))
+              : "",
+            livemode: isSubscribe?.livemode,
+
+            subID: isSubscribe.subid,
+            title: `${email} ${formatDate(
+              unix_timestamp_data(isSubscribe.start_date)
+            )}`,
+          },
+        },
+      ]
+
+      let results = await mutateSanity(mutationRequest)
+
       if (typeof results.transactionId == "string") {
         var token = jwt.sign(
           {

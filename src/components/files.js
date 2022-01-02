@@ -4,12 +4,8 @@ import PortableText from "@components/portabletext/portableText"
 import Axios from "axios"
 
 export default function Files({ data }) {
-  if (!data) {
-    return "sdadsa"
-  }
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-      {JSON.stringify(data)}
       <div className="px-4 py-5 sm:px-6">
         <h3 className="text-lg leading-6 font-medium text-gray-900">Course</h3>
         <p className="mt-1 max-w-2xl text-sm text-gray-500">

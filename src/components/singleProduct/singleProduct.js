@@ -30,20 +30,15 @@ const SingleProduct = ({
       if (isLoggedIn()) {
         const ourRequest = Axios.CancelToken.source()
 
-        console.log(productPrice)
-
         let contentRef = productPrice.content._id
         let { token } = getCurrentUser()
         let { data, status } = await Axios.get(
           `/api/isSubscribe?token=${token}&contentRef=${contentRef}`,
           { cancelToken: ourRequest.token }
         )
-
-        console.log(data)
         if (status >= 200 && status <= 300) {
           setIsSub(data.is)
         }
-
         return () => {
           ourRequest.cancel()
         }
