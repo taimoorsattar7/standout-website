@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { navigate } from "gatsby-link"
 
 import toast, { Toaster } from "react-hot-toast"
@@ -13,10 +13,11 @@ function encode(data) {
 
 export default function Contact() {
   const [state, setState] = React.useState({
-    "email": "sdasdsad",
-    "subject": "sadsadsa",
-    "message": "sdasdsa111",
+    email: "",
+    subject: "",
+    message: "",
   })
+  const [disable, setDisable] = useState(false)
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
@@ -24,45 +25,41 @@ export default function Contact() {
 
   const handleSubmit = async e => {
     e.preventDefault()
+    setDisable(true)
 
     try {
-
-      console.log(state)
-
       const { data } = await axios.post("/api/sendEmail", {
-        email: state?.email,
         subject: state?.subject,
-        message: state?.message,
+        message: `
+          <p>From Email: ${state?.email}</p>
+          <p>${state?.message}</p>
+        `,
       })
-
-      console.log(data)
 
       if (data?.emailSend) {
         toast.success("Email sent 🎉")
         setState({
-          "email": "",
-          "subject": "",
-          "message": "",
+          email: "",
+          subject: "",
+          message: "",
         })
       }
-      
+      setDisable(false)
     } catch (error) {
-      
+      setDisable(false)
     }
-
   }
 
   return (
     <div className="container mx-auto">
       <h1 className="my-3 text-3xl font-semibod text-gray-700">Contact Me</h1>
       <p className="text-gray-400">Fill in this form to send me a message.</p>
-   <Toaster position="top-center" />
+      <Toaster position="top-center" />
       <form
         className="pt-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7 mb-8"
         name="contact"
         onSubmit={handleSubmit}
       >
-
         <div className="mb-6">
           <label htmlFor="subject" className="block mb-2 text-sm text-gray-600">
             Subject
@@ -110,7 +107,8 @@ export default function Contact() {
         <div className="mb-6">
           <button
             type="submit"
-            className="w-full px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
+            className="group relative max-w-fit flex justify-center py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 cursor-pointer hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+            disabled={disable ? true : false}
           >
             Send Message
           </button>

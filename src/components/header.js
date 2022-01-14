@@ -4,7 +4,6 @@ import { cVerifyToken, isLoggedIn, logout, getCurrentUser } from "@utils/auth"
 
 import { Link, useStaticQuery, graphql, navigate } from "gatsby"
 
-import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image"
 import queryString from "query-string"
 
 export default function Header({ location }) {
@@ -49,27 +48,13 @@ export default function Header({ location }) {
           <div className="flex items-center justify-between w-full md:w-auto">
             <a href="/">
               <span className="sr-only">Author</span>
-              {/* <Image
-                fixed={avatar}
-                alt={"logo"}
-                className="bio-avatar"
-                imgStyle={{
-                  borderRadius: `50%`,
-                }}
-              /> */}
 
-              {/* <StaticImage
-                className="lg:h-48 md:h-36 w-full object-cover object-center"
-                src={"http://localhost:8000/gradienta.jpg"}
-                alt="A dinosaur"
-                placeholder="blurred"
-              /> */}
-
-              {/* <GatsbyImage
-                className="lg:h-48 md:h-36 w-full object-cover object-center"
-                image={avatar}
-                alt={"heading"}
-              /> */}
+              <img
+                className="h-10 w-auto"
+                src="/avatar.png"
+                alt="avatar"
+                loading="lazy"
+              />
             </a>
           </div>
         </div>

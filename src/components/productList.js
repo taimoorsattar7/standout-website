@@ -11,14 +11,6 @@ function truncate(str, no_words) {
 }
 
 export default function ProductList({ data }) {
-  if (!data) {
-    return (
-      <div>
-        <p>Nothing here.</p>
-      </div>
-    )
-  }
-
   return (
     <div className="p-4 md:w-2/4">
       <section className="flex flex-col justify-center antialiased">

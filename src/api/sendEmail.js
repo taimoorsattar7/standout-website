@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     let responce = await sendEmailSG({
-      email: email,
+      email: email ? email : process.env.EMAIL_FROM,
       subject: subject,
       html: message,
     })

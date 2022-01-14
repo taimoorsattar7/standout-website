@@ -43,42 +43,6 @@ const BlogPostTemplate = ({ data, location }) => {
           itemProp="articleBody"
         />
 
-        <div className="text-base md:text-sm text-grey py-6">
-          Tags:{" "}
-          <a
-            href="#"
-            className="text-base md:text-sm text-teal no-underline hover:underline"
-          >
-            Novocain
-          </a>{" "}
-          .{" "}
-          <a
-            href="#"
-            className="text-base md:text-sm text-teal no-underline hover:underline"
-          >
-            OxiTonCin
-          </a>
-        </div>
-
-        <hr className="border-b-2 border-grey-light mb-8" />
-
-        <div className="flex w-full items-center font-sans px-4 py-12">
-          <img
-            className="w-10 h-10 rounded-full mr-4"
-            src="http://i.pravatar.cc/300"
-            alt="Avatar of Author"
-          />
-
-          <div className="flex-1 px-2">
-            <p className="text-base font-bold md:text-xl leading-none mb-2">
-              {data.site.siteMetadata?.title}
-            </p>
-            <p className="text-grey-dark text-xs md:text-base">
-              {data.site.siteMetadata?.description}
-            </p>
-          </div>
-        </div>
-
         <hr className="border-b-2 border-grey-light mb-8" />
 
         <div className="font-sans flex justify-between content-center pb-12">
