@@ -15,11 +15,11 @@ import { mutateSanity } from "../lib/sanity/mutateSanity"
 import { unix_timestamp_data } from "../lib/unix_timestamp_data"
 
 export default async function handler(req, res) {
-  const email = normalizeEmail(req.body.email || req.query.email)
-  const priceId = req.body.priceId || req.query.priceId
-  const name = req.body.name || req.query.name
-  const priceRef = req.body.priceRef || req.query.priceRef
-  const redirectOrigin = req.body.redirectOrigin || req.query.redirectOrigin
+  const email = normalizeEmail(req?.body?.email || req?.query?.email)
+  const priceId = req?.body?.priceId || req?.query?.priceId
+  const name = req?.body?.name || req?.query?.name
+  const priceRef = req?.body?.priceRef || req?.query?.priceRef
+  const redirectOrigin = req?.body?.redirectOrigin || req?.query?.redirectOrigin
 
   let isSubscribe = await isSubscribed(email, priceId)
 

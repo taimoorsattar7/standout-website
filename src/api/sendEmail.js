@@ -1,20 +1,20 @@
-import {sendEmailSG} from "../lib/sendEmailSG"
+import { sendEmailSG } from "../lib/sendEmailSG"
 
 export default async function handler(req, res) {
-  
-  const email = req.body.email || req.query.email
-  const subject = req.body.subject || req.query.subject
-  const message = req.body.message || req.query.message
+  const email = req?.body?.email || req?.query?.email
+  const subject = req?.body?.subject || req?.query?.subject
+  const message = req?.body?.message || req?.query?.message
 
   try {
-    let responce = await sendEmailSG(
-      { email: email, subject: subject, html: message }
-    )
-
-    res.status(200).json({
-      emailSend: responce.emailSend ? true : false
+    let responce = await sendEmailSG({
+      email: email,
+      subject: subject,
+      html: message,
     })
 
+    res.status(200).json({
+      emailSend: responce.emailSend ? true : false,
+    })
   } catch (error) {
     const status = error.response?.status || error.statusCode || 500
     const message = error.response?.data?.message || error.message

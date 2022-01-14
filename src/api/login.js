@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken"
 
 export default async function handler(req, res) {
   try {
-    const email = normalizeEmail(req.body.email || req.query.email)
-    const password = req.body.password || req.query.password
+    const email = normalizeEmail(req?.body?.email || req?.query?.email)
+    const password = req?.body?.password || req?.query?.password
 
     if (!email && !password) {
       return res.status(403).send("A token is required for authentication")
