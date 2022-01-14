@@ -1,8 +1,5 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
-import Image from "gatsby-image"
-
-import { useStaticQuery } from "gatsby"
+import { useStaticQuery, Link, graphql } from "gatsby"
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
@@ -11,7 +8,6 @@ import SEO from "@components/seo"
 
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
-  const siteTitle = data.site.siteMetadata?.title || `Title`
   const { previous, next } = data
 
   const featureImg =
@@ -47,7 +43,7 @@ const BlogPostTemplate = ({ data, location }) => {
           itemProp="articleBody"
         />
 
-        <div className="text-base md:text-sm text-grey px-4 py-6">
+        <div className="text-base md:text-sm text-grey py-6">
           Tags:{" "}
           <a
             href="#"
@@ -64,7 +60,7 @@ const BlogPostTemplate = ({ data, location }) => {
           </a>
         </div>
 
-        <hr className="border-b-2 border-grey-light mb-8 mx-4" />
+        <hr className="border-b-2 border-grey-light mb-8" />
 
         <div className="flex w-full items-center font-sans px-4 py-12">
           <img
@@ -72,19 +68,20 @@ const BlogPostTemplate = ({ data, location }) => {
             src="http://i.pravatar.cc/300"
             alt="Avatar of Author"
           />
-          {/* <div className="flex-1 px-2">
+
+          <div className="flex-1 px-2">
             <p className="text-base font-bold md:text-xl leading-none mb-2">
-              {buildMeta.title}
+              {data.site.siteMetadata?.title}
             </p>
             <p className="text-grey-dark text-xs md:text-base">
-              {buildMeta.description}
+              {data.site.siteMetadata?.description}
             </p>
-          </div> */}
+          </div>
         </div>
 
-        <hr className="border-b-2 border-grey-light mb-8 mx-4" />
+        <hr className="border-b-2 border-grey-light mb-8" />
 
-        <div className="font-sans flex justify-between content-center px-4 pb-12">
+        <div className="font-sans flex justify-between content-center pb-12">
           <div className="text-left">
             {previous?.fields?.slug && (
               <>
@@ -145,6 +142,7 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        description
       }
     }
     markdownRemark(id: { eq: $id }) {

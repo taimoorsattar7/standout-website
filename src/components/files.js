@@ -1,5 +1,5 @@
 import React from "react"
-import { PaperClipIcon } from "@heroicons/react/solid"
+import { FaPaperclip } from "react-icons/fa"
 import PortableText from "@components/portabletext/portableText"
 import Axios from "axios"
 
@@ -38,7 +38,7 @@ export default function Files({ data }) {
                   return (
                     <li className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
                       <div className="w-0 flex-1 flex items-center">
-                        <PaperClipIcon
+                        <FaPaperclip
                           className="flex-shrink-0 h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />

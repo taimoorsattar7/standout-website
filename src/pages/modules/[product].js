@@ -9,7 +9,7 @@ import Layout from "@components/layout"
 import Seo from "@components/seo"
 import Files from "@components/files"
 
-export default function ModulePrd({ location, params, slug }) {
+export default function ModulePrd({ location, params }) {
   let [data, setData] = useState(null)
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function ModulePrd({ location, params, slug }) {
   return (
     <Layout location={location}>
       <Seo title="All posts" />
-      <Files data={data} />
+      {data ? <Files data={data} /> : <p>Not Found</p>}
     </Layout>
   )
 }

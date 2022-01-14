@@ -4,6 +4,7 @@ module.exports = {
   siteMetadata: {
     title: "Taimoor Sattar",
     description: "The developer",
+    siteUrl: "https://taimoorsattar.dev",
     social: {
       twitter: `taimoorsattar7`,
     },

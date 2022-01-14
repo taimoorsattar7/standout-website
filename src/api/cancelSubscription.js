@@ -9,10 +9,7 @@ import { formatDate } from "../lib/formatDate"
 // @ts-ignore
 import { unix_timestamp_data } from "../lib/unix_timestamp_data"
 
-export default async function handler(
-  req,
-  res
-) {
+export default async function handler(req, res) {
   const stripe = new stripeAPI(String(process.env.GATSBY_STRIPE_secret_ID), {
     apiVersion: "2020-08-27",
   })
@@ -50,11 +47,6 @@ export default async function handler(
       if (actionReq == "dont_cancel") {
         action = {
           cancel_at: "",
-        }
-      } else if (actionReq == "cancel_immediate") {
-        action = {
-          prorate: "false",
-          invoice_now: "true",
         }
       } else {
         action = {

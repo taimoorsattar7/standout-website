@@ -12,7 +12,7 @@ export default function Header({ location }) {
     query biosQueryAndBioQuery {
       avatar: file(absolutePath: { regex: "/profile-pic.jpg/" }) {
         childImageSharp {
-          gatsbyImageData(layout: FIXED)
+          gatsbyImageData
           original {
             src
           }
@@ -58,12 +58,12 @@ export default function Header({ location }) {
                 }}
               /> */}
 
-              <StaticImage
-                src={avatar}
+              {/* <StaticImage
+                className="lg:h-48 md:h-36 w-full object-cover object-center"
+                src={"http://localhost:8000/gradienta.jpg"}
                 alt="A dinosaur"
                 placeholder="blurred"
-                layout="fixed"
-              />
+              /> */}
 
               {/* <GatsbyImage
                 className="lg:h-48 md:h-36 w-full object-cover object-center"
