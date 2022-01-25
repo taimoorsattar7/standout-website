@@ -1,38 +1,39 @@
 import React from "react"
-import { useStaticQuery, Link, graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
 import Layout from "@components/layout"
-import SEO from "@components/seo"
+import Seo from "@components/seo"
 
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
   const { previous, next } = data
 
-  const featureImg =
-    post.frontmatter?.featuredimage?.childImageSharp?.gatsbyImageData
+  const featureImg = post.frontmatter?.featuredimage
 
   return (
     <Layout location={location}>
-      <SEO
+      <Seo
         title={post.frontmatter.title}
+        location={location}
         description={post.frontmatter.description || post.excerpt}
+        image={`${origin}${featureImg?.publicURL}`}
       />
 
       <article className="container w-full">
-        <h1 className="text-4xl font-extrabold leading-snug mb-4">
+        <h1 className="mb-4 text-4xl font-extrabold leading-snug">
           {post.frontmatter.title}
         </h1>
 
-        <p className="text-base font-light italic py-3">
+        <p className="py-3 text-base italic font-light">
           Published {post.frontmatter.date}
         </p>
 
         {featureImg && (
           <GatsbyImage
             className="w-full h-auto mb-5"
-            image={getImage(featureImg)}
+            image={getImage(featureImg?.childImageSharp?.gatsbyImageData)}
             alt={"heading"}
           />
         )}
@@ -43,13 +44,13 @@ const BlogPostTemplate = ({ data, location }) => {
           itemProp="articleBody"
         />
 
-        <hr className="border-b-2 border-grey-light mb-8" />
+        <hr className="mb-8 border-b-2 border-grey-light" />
 
-        <div className="font-sans flex justify-between content-center pb-12">
+        <div className="flex content-center justify-between pb-12 font-sans">
           <div className="text-left">
             {previous?.fields?.slug && (
               <>
-                <span className="text-xs md:text-sm font-normal text-grey-dark">
+                <span className="text-xs font-normal md:text-sm text-grey-dark">
                   {previous && (
                     <Link to={previous.fields.slug} rel="prev">
                       &laquo; Previous Post
@@ -60,7 +61,7 @@ const BlogPostTemplate = ({ data, location }) => {
                 <p>
                   <Link
                     to={previous.fields.slug}
-                    className="break-normal text-base md:text-sm text-teal font-bold no-underline hover:underline"
+                    className="text-base font-bold no-underline break-normal md:text-sm text-teal hover:underline"
                   >
                     {previous.frontmatter.title}
                   </Link>
@@ -72,7 +73,7 @@ const BlogPostTemplate = ({ data, location }) => {
           <div className="text-right">
             {next?.fields?.slug && (
               <>
-                <span className="text-xs md:text-sm font-normal text-grey-dark">
+                <span className="text-xs font-normal md:text-sm text-grey-dark">
                   <Link to={next.fields.slug} rel="next">
                     Next Post &raquo;
                   </Link>
@@ -81,7 +82,7 @@ const BlogPostTemplate = ({ data, location }) => {
                 <p>
                   <Link
                     to={next.fields.slug}
-                    className="break-normal text-base md:text-sm text-teal font-bold no-underline hover:underline"
+                    className="text-base font-bold no-underline break-normal md:text-sm text-teal hover:underline"
                   >
                     {next.frontmatter.title}
                   </Link>
@@ -103,12 +104,6 @@ export const pageQuery = graphql`
     $previousPostId: String
     $nextPostId: String
   ) {
-    site {
-      siteMetadata {
-        title
-        description
-      }
-    }
     markdownRemark(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
@@ -118,6 +113,7 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         description
         featuredimage {
+          publicURL
           childImageSharp {
             gatsbyImageData
           }

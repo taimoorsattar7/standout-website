@@ -7,7 +7,6 @@
 
 import React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-//  import Image from 'gatsby-image'
 
 const ArchiveBlog = () => {
   const {
@@ -16,7 +15,6 @@ const ArchiveBlog = () => {
     query {
       allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
         nodes {
-          excerpt
           fields {
             slug
           }
@@ -32,31 +30,34 @@ const ArchiveBlog = () => {
 
   if (nodes.length === 0) {
     return (
-      <div className="container max-w-2xl mx-auto px-3">
-        <h3 className="font-normal text-base text-gray-400">nothing Here :)</h3>
+      <div className="container max-w-2xl px-3 mx-auto">
+        <h3 className="text-base font-normal text-gray-400">nothing Here :)</h3>
       </div>
     )
   }
 
   return (
-    <div className="container max-w-2xl mx-auto px-3">
-      <h1 className="text-3xl font-extrabold leading-snug mb-4">
+    <div className="container max-w-2xl px-3 mx-auto">
+      <h1 className="mb-4 text-3xl font-extrabold leading-snug">
         Latest Posts
       </h1>
       <main>
         {nodes.map(blog => {
           return (
             <div className="py-4">
-              <h2 class="text-xl text-gray-900 font-extrabold leading-snug">
-                <a href={blog.fields.slug} className="text-indigo-600">
+              <h2 class="text-gray-900 text-xl font-extrabold leading-snug">
+                <Link to={blog.fields.slug} className="text-indigo-600">
                   {blog.frontmatter.title}
-                </a>
+                </Link>
               </h2>
 
-              <h3 className="font-normal text-base text-gray-700">
-                {blog.excerpt}
-              </h3>
-              <h3 className="text-xs font-light italic py-1">
+              {blog.frontmatter?.description && (
+                <h3 className="text-base font-normal text-gray-700">
+                  {blog.frontmatter?.description}
+                </h3>
+              )}
+
+              <h3 className="py-1 text-xs italic font-light">
                 {blog.frontmatter.date} by Taimoor Sattar
               </h3>
             </div>

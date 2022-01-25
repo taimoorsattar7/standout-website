@@ -1,27 +1,12 @@
 import React, { useEffect } from "react"
 
-import { cVerifyToken, isLoggedIn, logout, getCurrentUser } from "@utils/auth"
+import { cVerifyToken, isLoggedIn, logout } from "@utils/auth"
 
 import { Link, useStaticQuery, graphql, navigate } from "gatsby"
 
 import queryString from "query-string"
 
 export default function Header({ location }) {
-  const dataImg = useStaticQuery(graphql`
-    query biosQueryAndBioQuery {
-      avatar: file(absolutePath: { regex: "/profile-pic.jpg/" }) {
-        childImageSharp {
-          gatsbyImageData
-          original {
-            src
-          }
-        }
-        publicURL
-      }
-    }
-  `)
-  const avatar = dataImg?.avatar?.childImageSharp?.gatsbyImageData
-
   useEffect(() => {
     const queriedTheme = queryString.parse(location.search)
 
@@ -32,14 +17,13 @@ export default function Header({ location }) {
 
   async function checkToken(token) {
     await cVerifyToken(token)
-    // getCurrentUser()
   }
 
   function handleLogout() {
     logout(navigate("/login"))
   }
   return (
-    <header className="container max-w-2xl mx-auto px-3 pt-10">
+    <header className="container max-w-2xl px-3 pt-10 mx-auto">
       <nav
         className="relative flex items-center justify-between sm:h-10"
         aria-label="Global"
@@ -50,7 +34,7 @@ export default function Header({ location }) {
               <span className="sr-only">Author</span>
 
               <img
-                className="h-10 w-auto"
+                className="w-auto h-10"
                 src="/avatar.png"
                 alt="avatar"
                 loading="lazy"
@@ -68,17 +52,6 @@ export default function Header({ location }) {
             to="/"
           >
             Home
-          </Link>
-
-          <Link
-            className={
-              location.pathname === "/blogs"
-                ? "font-medium text-blue-500"
-                : "hover:text-blue-800"
-            }
-            to="/blogs"
-          >
-            Blogs
           </Link>
 
           <Link
@@ -141,7 +114,7 @@ export default function Header({ location }) {
         </div>
       </nav>
 
-      <div className="nav flex py-3 text-sm font-medium border-b"></div>
+      <div className="flex py-3 text-sm font-medium border-b nav"></div>
     </header>
   )
 }

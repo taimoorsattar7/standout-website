@@ -1,61 +1,31 @@
 import React from "react"
 import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
 
-const Seo = ({ description, canonical, lang, meta, title, origin, image }) => {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            social {
-              twitter
-            }
-          }
-        }
-      }
-    `
-  )
-
-  const metaCanonical = canonical || site.siteMetadata?.siteUrl
-
-  const metaOrigin = origin || site.siteMetadata?.siteUrl
-  const metaImage = image ? image : `${metaOrigin}/banner.jpg`
-
-  const metaDescription = description || site.siteMetadata.description
-  const defaultTitle = site.siteMetadata?.title
-
+const Seo = ({ location, description, title, image }) => {
   return (
     <>
-      <Helmet
-        htmlAttributes={{
-          lang,
-        }}
-      >
-        <meta name="yandex-verification" content="42cde140c0068db5" />
-        <title>{defaultTitle}</title>
-        <meta name="title" content={`${defaultTitle} | Taimoor Sattar`} />
-        <meta name="author" content="Taimoor Sattar" />
-        <meta name="description" content={metaDescription} />
-        <link rel="canonical" href={metaCanonical} />
+      <Helmet>
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        <link rel="canonical" href={location.href} />
 
         {/* Social: Twitter  */}
         {/* After inserting META need to validate at https://dev.twitter.com/docs/cards/validation/validator  */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:creator" content="@taimoorsattar7" />
-        <meta name="twitter:title" content={defaultTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content={metaImage} />
-        <meta name="twitter:url" content={metaCanonical} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {image && <meta name="twitter:image" content={image} />}
+
+        <meta name="twitter:url" content={location.href} />
 
         {/* Open Graph */}
-        <meta property="og:url" content={metaCanonical} />
+        <meta property="og:url" content={location.href} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={defaultTitle} />
-        <meta property="og:image" content={metaImage} />
-        <meta property="og:description" content={metaDescription} />
+        <meta property="og:title" content={title} />
+        {image && <meta property="og:image" content={image} />}
+
+        <meta property="og:description" content={description} />
       </Helmet>
     </>
   )
