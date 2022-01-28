@@ -13,7 +13,12 @@ export default function SingleProductPage({
   return (
     <>
       <Layout location={location}>
-        <Seo title="All posts" />
+        <Seo
+          title={sanityProduct.title}
+          location={location}
+          description="404: Not Found."
+        />
+
         <SingleProduct data={sanityProduct} location={location} />
       </Layout>
     </>

@@ -6,7 +6,11 @@ import Contact from "@components/contact"
 const ContactUs = ({ location }) => (
   <>
     <Layout location={location} title="Contact">
-      <Seo title="All posts" />
+      <Seo
+        title="Contact"
+        location={location}
+        description="Fill the contact form."
+      />
       <Contact />
     </Layout>
   </>

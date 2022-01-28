@@ -33,7 +33,11 @@ const Product = ({ location }) => {
   return (
     <>
       <Layout location={location} title="Contact Me">
-        <Seo title="All posts" />
+        <Seo
+          title="Product"
+          location={location}
+          description="Product content."
+        />
         <section className="text-gray-700 body-font">
           <div className="flex flex-wrap -m-4">
             {nodes.map(product => {
