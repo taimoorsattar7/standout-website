@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: taimoorsattar7/temp
+  repo: taimoorsattar7/gatsby-sanity-course
   branch: master
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
@@ -14,15 +14,15 @@ public_folder: /img
 publish_mode: editorial_workflow
 
 collections:
-  - name: 'blog'
-    label: 'Blog'
-    folder: 'content/blog'
+  - name: "blog"
+    label: "Blog"
+    folder: "content/blog"
     create: true
-    slug: 'index'
+    slug: "index"
     author: "{{author}}"
-    media_folder: ''
-    public_folder: ''
-    path: '{{title}}/index'
+    media_folder: ""
+    public_folder: ""
+    path: "{{title}}/index"
     editor:
       preview: false
     fields:
@@ -30,7 +30,6 @@ collections:
       - { label: "Description", name: "description", widget: "string" }
       - { name: date, label: Date, widget: date }
       - { name: body, label: Body, widget: markdown }
-      - { label: Tags, name: tags, widget: list }
       - {
           label: Featured Image,
           name: featuredimage,
