@@ -22,7 +22,7 @@ export const handleLogin = async ({ email, password = "" }) => {
     password: password,
   })
 
-  if (data.message == "success") {
+  if (data.message === "success") {
     return setUser({
       name: data.name,
       email: data.email,

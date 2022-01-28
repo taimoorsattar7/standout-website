@@ -18,7 +18,7 @@ const BlogPostTemplate = ({ data, location }) => {
         title={post.frontmatter.title}
         location={location}
         description={post.frontmatter.description || post.excerpt}
-        image={`${origin}${featureImg?.publicURL}`}
+        image={`${location.origin}${featureImg?.publicURL}`}
       />
 
       <article className="container w-full">

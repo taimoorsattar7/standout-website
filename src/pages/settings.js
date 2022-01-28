@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 
 import PortableText from "@components/portabletext/portableText"
-import { MdMessage } from "react-icons/md"
 
 import Layout from "@components/layout"
 import { navigate } from "gatsby"
@@ -55,7 +54,7 @@ const Manage = ({ location }) => {
 
         setDisable(false)
 
-        if (data.message === "success" && status == 200) {
+        if (data.message === "success" && status === 200) {
           toast.success("Your request is fulfilled.")
         }
 
@@ -83,37 +82,35 @@ const Manage = ({ location }) => {
     <Layout location={location}>
       <Toaster position="top-center" />
 
-      {/* {JSON.stringify(subscriptions)} */}
-
-      <div className="container max-w-2xl mx-auto px-3">
-        <h1 className="text-3xl font-extrabold leading-snug mb-4">
+      <div className="container max-w-2xl px-3 mx-auto">
+        <h1 className="mb-4 text-3xl font-extrabold leading-snug">
           Your's Subsciption
         </h1>
 
         <section className="flex antialiased">
           <div className="h-full">
             <div className="max-w-xs mx-auto">
-              <div className="flex flex-col h-full bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="flex-grow flex flex-col p-5">
+              <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
+                <div className="flex flex-col flex-grow p-5">
                   <div className="flex-grow">
-                    <header className="mb-3">
+                    <header className="mb-6">
                       <a
                         className="block focus:outline-none focus-visible:ring-2"
                         href="#0"
                       >
-                        <h3 className="text-xl text-gray-900 font-extrabold leading-snug">
+                        <h3 className="text-xl font-extrabold leading-snug text-gray-900">
                           {subscriptions?.module?.title}
                         </h3>
                       </a>
                     </header>
                     {subscriptions?.cancel_at_period_end == true && (
-                      <h3 className="text-xs font-light italic py-1">
+                      <h3 className="py-1 text-xs italic font-light">
                         Canceled at {subscriptions?.canceled_at}
                       </h3>
                     )}
 
                     <div className="mb-8">
-                      <p className="text-clip overflow-hidden">
+                      <p className="overflow-hidden text-clip">
                         {subscriptions?.module?.exerpt && (
                           <PortableText
                             blocks={subscriptions?.module?.exerpt}
@@ -132,7 +129,8 @@ const Manage = ({ location }) => {
 
                     {subscriptions?.cancel_at_period_end == false && (
                       <button
-                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white"
+                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+                        disabled={disable ? true : false}
                         onClick={() =>
                           cancelSubscription({
                             _id: subscriptions._id,
@@ -147,7 +145,8 @@ const Manage = ({ location }) => {
 
                     {subscriptions?.cancel_at_period_end == true && (
                       <button
-                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white"
+                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+                        disabled={disable ? true : false}
                         onClick={() =>
                           cancelSubscription({
                             _id: subscriptions._id,

@@ -59,9 +59,10 @@ export default function Modules({ location, params, slug }) {
           </h1>
 
           <h3 className="mb-6 text-base font-normal text-gray-700">
-            You can manage the subsciptions on the
-            <Link to="/settings">settings</Link>
-            page.
+            You can manage the subsciptions on the{" "}
+            <Link className="text-blue-500" to="/settings">
+              settings page &#8594;
+            </Link>
           </h3>
 
           <section className="flex antialiased">
