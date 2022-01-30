@@ -15,6 +15,7 @@ const BlogIndex = ({ data, location }) => {
         location={location}
         description="The Homepage to show blog posts."
       />
+
       <ArchiveBlog />
     </Layout>
   )

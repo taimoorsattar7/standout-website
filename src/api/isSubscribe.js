@@ -28,9 +28,16 @@ export default async function handler(req, res) {
       *[_type == 'subscriptions' && customer._ref in *[_type=='customer' && email=='${decoded.email}']._id]{price->{_id, content}}
     `)
 
-    if (subData.price.content._ref == contentRef) {
+    var isExist = false
+
+    subData.forEach(sub => {
+      if (sub?.price?.content?._ref == contentRef) {
+        isExist = true
+      }
+    })
+
+    if (isExist) {
       res.status(200).json({
-        refid: subData.price.content._ref,
         is: true,
         message: "success",
       })

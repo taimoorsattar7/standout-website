@@ -32,21 +32,17 @@ export default async function handler(req, res) {
         *[_type =='customer' && email=="${email}"]
       `)
 
-      let priceData = await querySanity(`
-            *[_id=='${priceRef}']
-          `)
-
       let password = ""
-      if (cusData?.password === "") {
+      if (cusData[0]?.password === "") {
         password = generator.generate({
           length: 10,
           numbers: true,
         })
       } else {
-        password = cusData?.password
+        password = cusData[0]?.password
       }
 
-      let cusRef = cusData?._id ? cusData?._id : isSubscribe.cusid
+      let cusRef = cusData[0]?._id ? cusData[0]?._id : isSubscribe.cusid
 
       let mutationRequest = [
         {
@@ -104,6 +100,19 @@ export default async function handler(req, res) {
           String(process.env.jwt),
           { expiresIn: "7d" }
         )
+
+        try {
+          await sendEmailSG({
+            email: email,
+            subject: "You credential for the course",
+            html: `
+            <p>Email: ${email}</p>
+            <p>Password: ${
+              password ? password : String(cusData[0]?.password)
+            }</p>
+            `,
+          })
+        } catch (error) {}
         if (redirectOrigin) {
           res.redirect(`${redirectOrigin}?state=success&token=${token}`)
         } else {

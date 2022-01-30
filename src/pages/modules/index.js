@@ -11,6 +11,8 @@ import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
 import { isLoggedIn, getCurrentUser } from "@utils/auth"
 
+import PortableText from "@components/portabletext/portableText"
+
 export default function Modules({ location, params, slug }) {
   const [content, setcontent] = useState(null)
 
@@ -64,50 +66,57 @@ export default function Modules({ location, params, slug }) {
               settings page &#8594;
             </Link>
           </h3>
-
-          <section className="flex antialiased">
-            <div className="h-full">
-              <div className="max-w-xs mx-auto">
-                <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
-                  <Link
-                    className="block focus:outline-none focus-visible:ring-2"
-                    to={`/modules/${content.module.slug.current}`}
-                  >
-                    <figure className="relative h-0 pb-[56.25%] overflow-hidden">
-                      <img
-                        className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
-                        src={content.module.image.url}
-                        alt="Paris"
-                        loading="lazy"
-                      />
-                    </figure>
-                  </Link>
-                  <div className="flex flex-col flex-grow p-5">
-                    <div className="flex-grow">
-                      <header className="mb-3">
-                        <a
-                          className="block focus:outline-none focus-visible:ring-2"
-                          href="#0"
-                        >
-                          <h3 className="text-xl font-extrabold leading-snug text-gray-900">
-                            {content.module.title}
-                          </h3>
-                        </a>
-                      </header>
-                    </div>
-
-                    <div className="flex justify-end space-x-2">
+          <section className="flex flex-wrap justify-between gap-4 antialiased">
+            {content.map(data => {
+              return (
+                <div className="w-5/12 h-full">
+                  <div className="max-w-xs mx-auto">
+                    <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
                       <Link
-                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-none focus-visible:ring-2 hover:bg-indigo-600 text-white"
-                        to={`/modules/${content.module.slug.current}`}
+                        className="block focus:outline-none focus-visible:ring-2"
+                        to={`/modules/${data.module?.slug?.current}`}
                       >
-                        Go to the course »
+                        <figure className="relative h-0 pb-[56.25%] overflow-hidden">
+                          <img
+                            className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
+                            src={data.module?.image?.url}
+                            alt="Paris"
+                            loading="lazy"
+                          />
+                        </figure>
                       </Link>
+                      <div className="flex flex-col flex-grow p-5">
+                        <div className="flex-grow">
+                          <header className="mb-3">
+                            <a
+                              className="block focus:outline-none focus-visible:ring-2"
+                              href="#0"
+                            >
+                              <h3 className="mb-4 text-xl font-extrabold leading-snug text-gray-900">
+                                {data.module.title}
+                              </h3>
+
+                              <p className="text-sm leading-snug text-gray-500">
+                                <PortableText blocks={data.module.exerpt} />
+                              </p>
+                            </a>
+                          </header>
+                        </div>
+
+                        <div className="flex justify-end space-x-2">
+                          <Link
+                            className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-none focus-visible:ring-2 hover:bg-indigo-600 text-white"
+                            to={`/modules/${data.module.slug.current}`}
+                          >
+                            Go to the course »
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              )
+            })}
           </section>
         </div>
       )}

@@ -87,149 +87,87 @@ const Manage = ({ location }) => {
           Your's Subsciption
         </h1>
 
-        <section className="flex antialiased">
-          <div className="h-full">
-            <div className="max-w-xs mx-auto">
-              <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
-                <div className="flex flex-col flex-grow p-5">
-                  <div className="flex-grow">
-                    <header className="mb-6">
-                      <a
-                        className="block focus:outline-none focus-visible:ring-2"
-                        href="#0"
-                      >
-                        <h3 className="text-xl font-extrabold leading-snug text-gray-900">
-                          {subscriptions?.module?.title}
-                        </h3>
-                      </a>
-                    </header>
-                    {subscriptions?.cancel_at_period_end == true && (
-                      <h3 className="py-1 text-xs italic font-light">
-                        Canceled at {subscriptions?.canceled_at}
-                      </h3>
-                    )}
-
-                    <div className="mb-8">
-                      <p className="overflow-hidden text-clip">
-                        {subscriptions?.module?.exerpt && (
-                          <PortableText
-                            blocks={subscriptions?.module?.exerpt}
-                          />
+        <section className="flex flex-wrap justify-between gap-4 antialiased">
+          {subscriptions.map(data => {
+            return (
+              <div className="w-5/12 h-full">
+                <div className="max-w-xs mx-auto">
+                  <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
+                    <div className="flex flex-col flex-grow p-5">
+                      <div className="flex-grow">
+                        <header className="mb-6">
+                          <a
+                            className="block focus:outline-none focus-visible:ring-2"
+                            href="#0"
+                          >
+                            <h3 className="text-xl font-extrabold leading-snug text-gray-900">
+                              {data?.module?.title}
+                            </h3>
+                          </a>
+                        </header>
+                        {data?.cancel_at_period_end == true && (
+                          <h3 className="py-1 text-xs italic font-light">
+                            Canceled at {data?.canceled_at}
+                          </h3>
                         )}
-                      </p>
-                    </div>
-                  </div>
 
-                  <div className="relative flex justify-end space-x-2">
-                    {subscriptions?.status && (
-                      <button class="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-50 focus:outline-none focus-visible:ring-2 hover:bg-indigo-100 text-indigo-500">
-                        {subscriptions.status}
-                      </button>
-                    )}
+                        <div className="mb-8">
+                          <p className="overflow-hidden text-clip">
+                            {data?.module?.exerpt && (
+                              <PortableText blocks={data?.module?.exerpt} />
+                            )}
+                          </p>
+                        </div>
+                      </div>
 
-                    {subscriptions?.cancel_at_period_end == false && (
-                      <button
-                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
-                        disabled={disable ? true : false}
-                        onClick={() =>
-                          cancelSubscription({
-                            _id: subscriptions._id,
-                            confirmMsg:
-                              "Do you want to cancel the subsciption at the end of trial period.",
-                          })
-                        }
-                      >
-                        😔 Cancel at period end
-                      </button>
-                    )}
+                      <div className="relative flex justify-end space-x-2">
+                        {data?.status && (
+                          <button class="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-50 focus:outline-none focus-visible:ring-2 hover:bg-indigo-100 text-indigo-500">
+                            {data.status}
+                          </button>
+                        )}
 
-                    {subscriptions?.cancel_at_period_end == true && (
-                      <button
-                        className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
-                        disabled={disable ? true : false}
-                        onClick={() =>
-                          cancelSubscription({
-                            _id: subscriptions._id,
-                            actionReq: "dont_cancel",
-                            confirmMsg:
-                              "Do you want to resume the subsciption.",
-                          })
-                        }
-                      >
-                        Resume subscription »
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* {subscriptions ? (
-            <div>
-              {subscriptions?.map((sub: any, index: any) => {
-                return (
-                  <div
-                    key={index}
-                    className="bg-light-blue p-t-10 p-b-10 p-l-10 p-r-10"
-                  >
-                    <div className="headline--no-decor pointer">
-                      <h2 className="headline headline__medium m-b-10">
-                        🔗{sub.module.title}
-                      </h2>
-
-                      <div className="flex">
-                        {sub.cancel_at_period_end == true && (
+                        {data?.cancel_at_period_end == false && (
                           <button
-                            className="pointer bg-light-yellow"
+                            className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+                            disabled={disable ? true : false}
                             onClick={() =>
                               cancelSubscription({
-                                _id: sub._id,
+                                _id: data._id,
+                                confirmMsg:
+                                  "Do you want to cancel the subsciption at the end of trial period.",
+                              })
+                            }
+                          >
+                            😔 Cancel at period end
+                          </button>
+                        )}
+
+                        {data?.cancel_at_period_end == true && (
+                          <button
+                            className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+                            disabled={disable ? true : false}
+                            onClick={() =>
+                              cancelSubscription({
+                                _id: data._id,
                                 actionReq: "dont_cancel",
                                 confirmMsg:
                                   "Do you want to resume the subsciption.",
                               })
                             }
                           >
-                            <span className="headline headline__text">
-                              😊 Don't cancel
-                            </span>
+                            Resume subscription »
                           </button>
                         )}
-                        {sub.cancel_at_period_end == false &&
-                          sub.status == "active" && (
-                            <button
-                              className="pointer bg-light-red"
-                              onClick={() =>
-                                cancelSubscription({
-                                  _id: sub._id,
-                                  confirmMsg:
-                                    "Do you want to cancel the subsciption at the end of trial period.",
-                                })
-                              }
-                            >
-                              <span className="headline headline__text">
-                                😔 Cancel at period end
-                              </span>
-                            </button>
-                          )}
                       </div>
-
-                      {/* <p className="headline headline__text">
-                          {p.node.seo.excerpt}
-                        </p> 
                     </div>
                   </div>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="headline headline__text">
-              Please wait while we are loading your data
-            </div>
-          )} */}
+                </div>
+              </div>
+            )
+          })}
+        </section>
+      </div>
     </Layout>
   )
 }

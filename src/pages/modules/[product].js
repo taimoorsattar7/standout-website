@@ -26,19 +26,20 @@ export default function ModulePrd({ location, params }) {
           }
         `)
 
-        let contentRef = contentData._id
+        let contentRef = contentData[0]._id
 
         let { token } = getCurrentUser()
+        console.log(`/api/isSubscribe?token=${token}&contentRef=${contentRef}`)
         let { data } = await Axios.get(
           `/api/isSubscribe?token=${token}&contentRef=${contentRef}`
         )
 
         if (data?.is) {
-          setData(contentData)
+          setData(contentData[0])
         }
       } catch (error) {
         console.log(error)
-        setData(null)
+        setData(false)
       }
     }
 
@@ -62,7 +63,9 @@ export default function ModulePrd({ location, params }) {
       <Seo title={data.title} location={location} description="Modules Page." />
 
       {data == false ? (
-        <h3 className="text-base font-normal text-gray-700">Nothing Found</h3>
+        <h3 className="text-base font-normal text-gray-700">
+          You are not authorize to view the content.
+        </h3>
       ) : (
         <Files data={data} />
       )}

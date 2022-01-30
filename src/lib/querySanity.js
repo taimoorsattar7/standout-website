@@ -10,7 +10,7 @@ export const querySanity = async query => {
       }
     )
 
-    return sanityRef.data?.result[0]
+    return sanityRef.data?.result
   } catch (err) {
     return []
   }
