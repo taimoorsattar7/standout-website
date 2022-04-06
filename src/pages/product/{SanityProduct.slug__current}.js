@@ -13,11 +13,7 @@ export default function SingleProductPage({
   return (
     <>
       <Layout location={location}>
-        <Seo
-          title={sanityProduct.title}
-          location={location}
-          description="404: Not Found."
-        />
+        <Seo title={sanityProduct.title} location={location} />
 
         <SingleProduct data={sanityProduct} location={location} />
       </Layout>
@@ -35,7 +31,6 @@ export const query = graphql`
       slug {
         current
       }
-      tags
       productPrice {
         _id
         priceID

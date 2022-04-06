@@ -10,7 +10,7 @@ import { querySanity } from "@lib/querySanity"
 import Axios from "axios"
 import toast, { Toaster } from "react-hot-toast"
 
-const Manage = ({ location }) => {
+const Settings = ({ location }) => {
   const [subscriptions, setSubscriptions] = useState(null)
   const [disable, setDisable] = useState(false)
   useEffect(() => {
@@ -105,7 +105,7 @@ const Manage = ({ location }) => {
                             </h3>
                           </a>
                         </header>
-                        {data?.cancel_at_period_end == true && (
+                        {data?.cancel_at_period_end === true && (
                           <h3 className="py-1 text-xs italic font-light">
                             Canceled at {data?.canceled_at}
                           </h3>
@@ -127,7 +127,7 @@ const Manage = ({ location }) => {
                           </button>
                         )}
 
-                        {data?.cancel_at_period_end == false && (
+                        {data?.cancel_at_period_end === false && (
                           <button
                             className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
                             disabled={disable ? true : false}
@@ -143,7 +143,7 @@ const Manage = ({ location }) => {
                           </button>
                         )}
 
-                        {data?.cancel_at_period_end == true && (
+                        {data?.cancel_at_period_end === true && (
                           <button
                             className="font-semibold text-sm inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out bg-indigo-500 focus:outline-non text-white disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
                             disabled={disable ? true : false}
@@ -172,4 +172,4 @@ const Manage = ({ location }) => {
   )
 }
 
-export default Manage
+export default Settings

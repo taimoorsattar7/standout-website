@@ -1,9 +1,5 @@
 import Axios from "axios"
 
-// import { useQuery } from "react-query"
-
-import get_gravatar_image_url from "@lib/get_gravatar_image_url"
-
 const isBrowser = typeof window !== `undefined`
 
 const getUser = () => {
@@ -26,7 +22,6 @@ export const handleLogin = async ({ email, password = "" }) => {
     return setUser({
       name: data.name,
       email: data.email,
-      avatar: get_gravatar_image_url(data.email, 120, "mm", "g", "y"),
       token: data.token,
     })
   }
@@ -48,21 +43,5 @@ export const logout = callback => {
   setUser({})
   if (callback) {
     callback()
-  }
-}
-
-export const cVerifyToken = async token => {
-  if (!isBrowser) return "false"
-  try {
-    let { data } = await Axios.post(`/api/verifyToken`, {
-      token: token,
-    })
-
-    return setUser({
-      email: data.email,
-      token: data.token,
-    })
-  } catch (error) {
-    console.log(error)
   }
 }

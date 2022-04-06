@@ -1,7 +1,4 @@
 import React from "react"
-import { Link, navigate } from "gatsby"
-
-import { isLoggedIn, logout } from "@utils/auth"
 
 import Header from "@components/header"
 import Footer from "@components/footer"
@@ -11,7 +8,7 @@ const Layout = ({ location, children }) => {
     <>
       <Header location={location} />
 
-      <main className="container max-w-2xl mx-auto px-5 py-10">{children}</main>
+      <main className="container max-w-2xl px-5 py-10 mx-auto">{children}</main>
 
       <Footer />
     </>

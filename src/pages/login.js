@@ -5,13 +5,7 @@ import Seo from "@components/seo"
 import toast, { Toaster } from "react-hot-toast"
 
 import { navigate } from "gatsby"
-import { handleLogin, isLoggedIn, getCurrentUser } from "@utils/auth"
-
-function encode(data) {
-  return Object.keys(data)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join("&")
-}
+import { handleLogin, isLoggedIn } from "@utils/auth"
 
 export default function Login({ location }) {
   const [state, setState] = useState({})
@@ -20,6 +14,12 @@ export default function Login({ location }) {
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
   }
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/modules/")
+    }
+  }, [])
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -46,15 +46,10 @@ export default function Login({ location }) {
     }
   }
 
-  useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/modules/")
-    }
-  }, [])
-
   return (
     <Layout location={location}>
       <Seo title="Login" location={location} description="Login." />
+      <Toaster position="top-center" />
       <div className="flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
@@ -67,7 +62,6 @@ export default function Login({ location }) {
             action="#"
             method="POST"
           >
-            <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
                 <label htmlFor="email-address" className="sr-only">

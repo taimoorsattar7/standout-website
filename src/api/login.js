@@ -1,25 +1,24 @@
-import normalizeEmail from "validator/lib/normalizeEmail"
 import { querySanity } from "../lib/querySanity"
 import jwt from "jsonwebtoken"
 
 export default async function handler(req, res) {
   try {
-    const email = normalizeEmail(req?.body?.email || req?.query?.email)
+    const email = req?.body?.email || req?.query?.email
     const password = req?.body?.password || req?.query?.password
 
     if (!email && !password) {
-      return res.status(403).send("A token is required for authentication")
+      return res.status(403).send("Missing data")
     } else {
       let cusData = await querySanity(`
         *[_type =='customer' && email=="${email}"]
       `)
 
-      if (cusData.password === password) {
+      if (cusData[0].password === password) {
         var token = jwt.sign(
           {
-            name: cusData.name,
-            email: cusData.email,
-            password: cusData.password,
+            name: cusData[0].name,
+            email: cusData[0].email,
+            password: cusData[0].password,
           },
           String(process.env.jwt),
           { expiresIn: "7d" }
@@ -28,8 +27,8 @@ export default async function handler(req, res) {
         res.status(200).json({
           message: "success",
           token: token,
-          email: cusData.email,
-          name: cusData.name,
+          email: cusData[0].email,
+          name: cusData[0].name,
         })
       } else {
         throw {

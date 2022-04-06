@@ -1,5 +1,4 @@
 import React from "react"
-import { Link, navigate } from "gatsby"
 
 const Fail = () => {
   return (
@@ -24,7 +23,7 @@ const Fail = () => {
       </div>
       <div className="mt-3 text-center sm:mt-5">
         <h3
-          className="text-lg leading-6 font-medium text-gray-900"
+          className="text-lg font-medium leading-6 text-gray-900"
           id="modal-title"
         >
           Payment Failed

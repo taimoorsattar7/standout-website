@@ -18,7 +18,6 @@ const Product = ({ location }) => {
           slug {
             current
           }
-          tags
           id
           image {
             asset {
@@ -32,7 +31,7 @@ const Product = ({ location }) => {
   `)
   return (
     <>
-      <Layout location={location} title="Contact Me">
+      <Layout location={location}>
         <Seo
           title="Product"
           location={location}

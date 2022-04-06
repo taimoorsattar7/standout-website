@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 
 const Success = ({ url }) => {
   return (
@@ -31,8 +31,8 @@ const Success = ({ url }) => {
         </h3>
         <div className="mt-2">
           <p className="text-sm text-gray-500">
-            Thanks!!! Your payment was already received. Please check your email
-            and click the below button to login.
+            Thanks!!! Your payment is received. Please check your email and
+            click the below button to navigate to the login page.
           </p>
         </div>
       </div>

@@ -1,13 +1,22 @@
 export default function handler(req, res) {
-  // https://docs.netlify.com/configure-builds/environment-variables/
-  res.status(200).send({
-    NETLIFY: String(process.env.NETLIFY),
-    BUILD_ID: String(process.env.BUILD_ID),
-    CONTEXT: String(process.env.GATSBY_CONTEXT),
-    NODE_VERSION: String(process.env.NODE_VERSION),
-    NODE_ENV: String(process.env.NODE_ENV),
-    URL: String(process.env.URL),
-    DEPLOY_URL: String(process.env.DEPLOY_URL),
-    msg: `hello world`,
-  })
+  try {
+    const name = req?.body?.name || req?.query?.name
+    if (!name) {
+      throw {
+        status: 500,
+        message: "Name field is required.",
+      }
+    }
+
+    res.status(200).send({
+      msg: `hello ${name}`,
+    })
+  } catch (error) {
+    const status = error.response?.status || error.statusCode || 500
+    const message = error.response?.data?.message || error.message
+
+    res.status(status).json({
+      message: error.expose ? message : `Faulty ${req.baseUrl}: ${message}`,
+    })
+  }
 }

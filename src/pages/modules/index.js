@@ -6,9 +6,6 @@ import Layout from "@components/layout"
 import Seo from "@components/seo"
 
 import { navigate, Link } from "gatsby"
-
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
-
 import { isLoggedIn, getCurrentUser } from "@utils/auth"
 
 import PortableText from "@components/portabletext/portableText"
@@ -52,7 +49,7 @@ export default function Modules({ location, params, slug }) {
     <Layout location={location}>
       <Seo title="Modules" location={location} description="Modules Page." />
 
-      {content == false ? (
+      {content === false ? (
         <h3 className="text-base font-normal text-gray-700">Nothing Found</h3>
       ) : (
         <div className="container max-w-2xl px-3 mx-auto">

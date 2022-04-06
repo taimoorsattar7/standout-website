@@ -2,13 +2,9 @@ import React from "react"
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
-import { Link, useStaticQuery, graphql } from "gatsby"
+import { Link } from "gatsby"
 
 import PortableText from "@components/portabletext/portableText"
-
-function truncate(str, no_words) {
-  return str.split(" ").splice(0, no_words).join(" ")
-}
 
 export default function ProductList({ data }) {
   return (
@@ -16,34 +12,34 @@ export default function ProductList({ data }) {
       <section className="flex flex-col justify-center antialiased">
         <div className="h-full">
           <div className="max-w-xs mx-auto">
-            <div className="flex flex-col h-full bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
               <Link
                 className="block focus:outline-none focus-visible:ring-2"
                 to={`/modules/${data.slug.current}`}
               >
                 <figure className="relative h-0 pb-[56.25%] overflow-hidden">
                   <GatsbyImage
-                    className="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition duration-700 ease-out"
+                    className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
                     image={getImage(data.image.asset)}
                     alt={"heading"}
                   />
                 </figure>
               </Link>
-              <div className="flex-grow flex flex-col p-5">
+              <div className="flex flex-col flex-grow p-5">
                 <div className="flex-grow">
                   <header className="mb-3">
                     <a
                       className="block focus:outline-none focus-visible:ring-2"
                       href="#0"
                     >
-                      <h3 className="text-xl text-gray-900 font-extrabold leading-snug">
+                      <h3 className="text-xl font-extrabold leading-snug text-gray-900">
                         {data.title}
                       </h3>
                     </a>
                   </header>
 
                   <div className="mb-8">
-                    <p className="text-clip overflow-hidden">
+                    <p className="overflow-hidden text-clip">
                       {data._rawExerpt && (
                         <PortableText blocks={data._rawExerpt} />
                       )}

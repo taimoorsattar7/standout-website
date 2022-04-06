@@ -1,26 +1,19 @@
 import generator from "generate-password"
-import normalizeEmail from "validator/lib/normalizeEmail"
-import jwt from "jsonwebtoken"
+import { format } from "date-fns"
 
 import { isSubscribed } from "../lib/isSubscribed"
-
 import { querySanity } from "../lib/querySanity"
-
 import { sendEmailSG } from "../lib/sendEmailSG"
-
-import { formatDate } from "../lib/formatDate"
-
 import { mutateSanity } from "../lib/sanity/mutateSanity"
 
-import { unix_timestamp_data } from "../lib/unix_timestamp_data"
-
 export default async function handler(req, res) {
-  const email = normalizeEmail(req?.body?.email || req?.query?.email)
+  const email = req?.body?.email || req?.query?.email
   const priceId = req?.body?.priceId || req?.query?.priceId
   const name = req?.body?.name || req?.query?.name
   const priceRef = req?.body?.priceRef || req?.query?.priceRef
   const redirectOrigin = req?.body?.redirectOrigin || req?.query?.redirectOrigin
 
+  // Check if the subscription actually exist in Stripe
   let isSubscribe = await isSubscribed(email, priceId)
 
   try {
@@ -28,29 +21,28 @@ export default async function handler(req, res) {
       typeof isSubscribe.cusid == "string" &&
       typeof isSubscribe.subid == "string"
     ) {
+      // Query customer from Sanity Server
       let cusData = await querySanity(`
         *[_type =='customer' && email=="${email}"]
       `)
 
-      let password = ""
-      if (cusData[0]?.password === "") {
-        password = generator.generate({
-          length: 10,
-          numbers: true,
-        })
-      } else {
-        password = cusData[0]?.password
-      }
+      // Generate random password
+      let genPassword = generator.generate({ length: 10, numbers: true })
+
+      let cusPassword = cusData[0]?.password
+        ? cusData[0]?.password
+        : genPassword
 
       let cusRef = cusData[0]?._id ? cusData[0]?._id : isSubscribe.cusid
 
+      // Define mutation request for Sanity
       let mutationRequest = [
         {
           createIfNotExists: {
             _id: cusRef,
             _type: "customer",
             email: email,
-            password: password,
+            password: cusPassword,
             name: name,
             cusid: cusRef,
           },
@@ -59,32 +51,22 @@ export default async function handler(req, res) {
           createIfNotExists: {
             _type: "subscriptions",
             _id: isSubscribe.subid,
-            customer: {
-              _ref: cusRef,
-              _type: "reference",
-            },
-            price: {
-              _ref: priceRef,
-              _type: "reference",
-            },
-
+            customer: { _ref: cusRef, _type: "reference" },
+            price: { _ref: priceRef, _type: "reference" },
             status: isSubscribe?.status,
             cancel_at_period_end: isSubscribe.cancel_at_period_end,
             canceled_at: isSubscribe?.canceled_at
-              ? formatDate(unix_timestamp_data(isSubscribe?.canceled_at))
+              ? format(new Date(isSubscribe?.canceled_at * 1000), "yyyy-MM-dd")
               : "",
             cancel_at: isSubscribe?.cancel_at
-              ? formatDate(unix_timestamp_data(isSubscribe?.cancel_at))
+              ? format(new Date(isSubscribe?.cancel_at * 1000), "yyyy-MM-dd")
               : "",
             start_date: isSubscribe.start_date
-              ? formatDate(unix_timestamp_data(isSubscribe.start_date))
+              ? format(new Date(isSubscribe.start_date * 1000), "yyyy-MM-dd")
               : "",
             livemode: isSubscribe?.livemode,
-
             subID: isSubscribe.subid,
-            title: `${email} ${formatDate(
-              unix_timestamp_data(isSubscribe.start_date)
-            )}`,
+            title: `${email}`,
           },
         },
       ]
@@ -92,32 +74,23 @@ export default async function handler(req, res) {
       let results = await mutateSanity(mutationRequest)
 
       if (typeof results.transactionId == "string") {
-        var token = jwt.sign(
-          {
-            name: name,
-            email: email,
-          },
-          String(process.env.jwt),
-          { expiresIn: "7d" }
-        )
-
         try {
+          // Send email to customer for their login details
           await sendEmailSG({
             email: email,
             subject: "You credential for the course",
             html: `
             <p>Email: ${email}</p>
-            <p>Password: ${
-              password ? password : String(cusData[0]?.password)
-            }</p>
+            <p>Password: ${cusPassword}</p>
             `,
           })
         } catch (error) {}
+
         if (redirectOrigin) {
-          res.redirect(`${redirectOrigin}?state=success&token=${token}`)
+          // Redirect to the success URL
+          res.redirect(`${redirectOrigin}?state=success`)
         } else {
           res.status(200).json({
-            token: token,
             message: "success",
           })
         }

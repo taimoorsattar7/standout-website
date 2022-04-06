@@ -1,24 +1,9 @@
-import React, { useEffect } from "react"
+import React from "react"
 
-import { cVerifyToken, isLoggedIn, logout } from "@utils/auth"
-
-import { Link, useStaticQuery, graphql, navigate } from "gatsby"
-
-import queryString from "query-string"
+import { isLoggedIn, logout } from "@utils/auth"
+import { Link, navigate } from "gatsby"
 
 export default function Header({ location }) {
-  useEffect(() => {
-    const queriedTheme = queryString.parse(location.search)
-
-    if (queriedTheme.token) {
-      checkToken(queriedTheme.token)
-    }
-  }, [])
-
-  async function checkToken(token) {
-    await cVerifyToken(token)
-  }
-
   function handleLogout() {
     logout(navigate("/login"))
   }

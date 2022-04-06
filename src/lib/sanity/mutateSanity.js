@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from "axios"
+import Axios from "axios"
 
 export const mutateSanity = async mutationRequest => {
   try {

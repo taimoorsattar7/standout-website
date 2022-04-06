@@ -1,20 +1,19 @@
-import React, { useEffect } from "react"
-import { Link, navigate } from "gatsby"
+import React from "react"
 
 const Modal = ({ location, children, onClose }) => {
   return (
     <div
-      className="fixed z-10 inset-0 overflow-y-auto"
+      className="fixed inset-0 z-10 overflow-y-auto"
       aria-labelledby="modal-title"
       x-ref="dialog"
       aria-modal="true"
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div
           onClick={() => {
             onClose()
           }}
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
           aria-hidden="true"
         ></div>
 
@@ -25,7 +24,7 @@ const Modal = ({ location, children, onClose }) => {
 
         <div
           x-show="open"
-          className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          className="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
         >
           <div>
             <div className="modal__body">{children}</div>

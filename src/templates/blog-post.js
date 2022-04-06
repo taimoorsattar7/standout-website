@@ -9,16 +9,15 @@ import Seo from "@components/seo"
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
   const { previous, next } = data
-
-  const featureImg = post.frontmatter?.featuredimage
+  const featureImg = post?.frontmatter?.featuredimage
 
   return (
     <Layout location={location}>
       <Seo
         title={post.frontmatter.title}
         location={location}
-        description={post.frontmatter.description || post.excerpt}
         image={`${location.origin}${featureImg?.publicURL}`}
+        description={post.frontmatter.description || post.excerpt}
       />
 
       <article className="container w-full">

@@ -1,15 +1,7 @@
 import React, { useState } from "react"
-import { navigate } from "gatsby-link"
-
 import toast, { Toaster } from "react-hot-toast"
 
 import axios from "axios"
-
-function encode(data) {
-  return Object.keys(data)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join("&")
-}
 
 export default function Contact() {
   const [state, setState] = React.useState({
@@ -52,11 +44,11 @@ export default function Contact() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="my-3 text-3xl font-semibod text-gray-700">Contact Me</h1>
+      <h1 className="my-3 text-3xl text-gray-700 font-semibod">Contact Me</h1>
       <p className="text-gray-400">Fill in this form to send me a message.</p>
       <Toaster position="top-center" />
       <form
-        className="pt-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7 mb-8"
+        className="pt-8 mb-8 space-y-4 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7"
         name="contact"
         onSubmit={handleSubmit}
       >
@@ -107,7 +99,7 @@ export default function Contact() {
         <div className="mb-6">
           <button
             type="submit"
-            className="group relative max-w-fit flex justify-center py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 cursor-pointer hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
+            className="relative flex justify-center px-6 py-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md cursor-pointer group max-w-fit hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none disabled:pointer-events-none"
             disabled={disable ? true : false}
           >
             Send Message
