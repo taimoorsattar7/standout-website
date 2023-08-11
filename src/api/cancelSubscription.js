@@ -2,6 +2,7 @@ import Axios from "axios"
 import validator from "validator"
 import jwt from "jsonwebtoken"
 import stripeAPI from "stripe"
+import { sanityRequest, sanityUpdate } from "../lib/sanity/sanityActions"
 
 import { formatDate } from "../lib/formatDate"
 import { unix_timestamp_data } from "../lib/unix_timestamp_data"
@@ -44,35 +45,18 @@ export default async function handler(req, res) {
 
     let subscription = await stripe.subscriptions.update(subID, action)
 
-    let { data } = await Axios.post(
-      `https://${process.env.GATSBY_SANITY_PROJECT_ID}.api.sanity.io/v2021-06-07/data/mutate/${process.env.GATSBY_SANITY_DATASET}`,
-      {
-        mutations: [
-          {
-            patch: {
-              id: subID,
-              set: {
-                status: subscription.status,
-                cancel_at_period_end: subscription.cancel_at_period_end,
-                canceled_at: formatDate(
-                  unix_timestamp_data(subscription.canceled_at)
-                ),
-                cancel_at: formatDate(
-                  unix_timestamp_data(subscription.cancel_at)
-                ),
-                livemode: subscription.livemode,
-              },
-            },
-          },
-        ],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GATSBY_SANITY_BEARER_TOKEN}`,
-        },
-      }
-    )
+    await sanityUpdate(subID, {
+      status: subscription.status,
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      canceled_at: formatDate(unix_timestamp_data(subscription.canceled_at)),
+      cancel_at: formatDate(unix_timestamp_data(subscription.cancel_at)),
+      livemode: subscription.livemode,
+    })
+
     res.status(200).json({
+      status: subscription.status,
+      cancel_at: subscription.cancel_at,
+      livemode: subscription.livemode,
       message: "success",
     })
   } catch (error) {

@@ -1,5 +1,5 @@
-import { querySanity } from "../lib/querySanity"
 import jwt from "jsonwebtoken"
+import { sanityRequest } from "../lib/sanity/sanityActions"
 
 export default async function handler(req, res) {
   try {
@@ -9,11 +9,11 @@ export default async function handler(req, res) {
     if (!email && !password) {
       return res.status(403).send("Missing data")
     } else {
-      let cusData = await querySanity(`
-        *[_type =='customer' && email=="${email}"]
-      `)
+      let cusData = await sanityRequest(
+        `*[_type =='customer' && email=='${email}']`,
+      )
 
-      if (cusData[0].password === password) {
+      if (cusData[0]?.password === password) {
         var token = jwt.sign(
           {
             name: cusData[0].name,
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
             password: cusData[0].password,
           },
           String(process.env.jwt),
-          { expiresIn: "7d" }
+          { expiresIn: "7d" },
         )
 
         res.status(200).json({

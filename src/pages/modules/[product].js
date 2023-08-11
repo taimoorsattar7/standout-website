@@ -28,7 +28,7 @@ export default function ModulePrd({ location, params }) {
 
         let { token } = getCurrentUser()
         let { data } = await Axios.get(
-          `/api/isSubscribe?token=${token}&contentRef=${contentRef}`
+          `/api/isSubscribe?token=${token}&contentRef=${contentRef}`,
         )
 
         if (data?.is) {
@@ -95,7 +95,7 @@ export default function ModulePrd({ location, params }) {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   <ul className="border border-gray-200 divide-y divide-gray-200 rounded-md">
-                    {data.documents.map(doc => {
+                    {data?.documents?.map(doc => {
                       return (
                         <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                           <div className="flex items-center flex-1 w-0">

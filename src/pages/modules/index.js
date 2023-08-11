@@ -64,23 +64,28 @@ export default function Modules({ location, params, slug }) {
             </Link>
           </h3>
           <section className="flex flex-wrap justify-between gap-4 antialiased">
-            {content.map(data => {
+            {content.map((data, index) => {
+              let imageURL = data?.module?.image?.url
               return (
-                <div className="w-5/12 h-full">
+                <div key={index} className="w-5/12 h-full">
                   <div className="max-w-xs mx-auto">
                     <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-lg">
                       <Link
                         className="block focus:outline-none focus-visible:ring-2"
                         to={`/modules/${data.module?.slug?.current}`}
                       >
-                        <figure className="relative h-0 pb-[56.25%] overflow-hidden">
-                          <img
-                            className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
-                            src={data.module?.image?.url}
-                            alt="Paris"
-                            loading="lazy"
-                          />
-                        </figure>
+                        {imageURL ? (
+                          <figure className="relative h-0 pb-[56.25%] overflow-hidden">
+                            <img
+                              className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
+                              src={data?.module?.image?.url}
+                              alt="Paris"
+                              loading="lazy"
+                            />
+                          </figure>
+                        ) : (
+                          <></>
+                        )}
                       </Link>
                       <div className="flex flex-col flex-grow p-5">
                         <div className="flex-grow">

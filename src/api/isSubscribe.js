@@ -2,7 +2,7 @@ import Axios from "axios"
 import validator from "validator"
 import jwt from "jsonwebtoken"
 
-import { querySanity } from "../lib/querySanity"
+import { sanityRequest } from "../lib/sanity/sanityActions"
 
 export default async function handler(req, res) {
   try {
@@ -24,9 +24,9 @@ export default async function handler(req, res) {
       }
     }
 
-    let subData = await querySanity(`
-      *[_type == 'subscriptions' && customer._ref in *[_type=='customer' && email=='${decoded.email}']._id]{price->{_id, content}}
-    `)
+    let subData = await sanityRequest(
+      `*[_type == 'subscriptions' && customer._ref in *[_type=='customer' && email=='${decoded.email}']._id]{price->{_id, content}}`,
+    )
 
     var isExist = false
 

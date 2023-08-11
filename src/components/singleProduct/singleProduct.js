@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
 import Success from "./state/success"
@@ -25,7 +24,7 @@ const SingleProduct = ({
       setShowModal(true)
       setModalState(queriedTheme.state)
     }
-  }, [])
+  }, [location.search])
 
   function handleState() {
     setShowModal(true)
@@ -36,16 +35,16 @@ const SingleProduct = ({
     <main className="grid place-items-center">
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-          {modalState == "form" && (
+          {modalState === "form" && (
             <Form location={location} productPrice={productPrice} />
           )}
-          {modalState == "success" && (
+          {modalState === "success" && (
             <Success
               location={location}
               url={`/modules/${productPrice?.content?.slug?.current}`}
             />
           )}
-          {modalState == "fail" && <Fail />}
+          {modalState === "fail" && <Fail />}
         </Modal>
       )}
 

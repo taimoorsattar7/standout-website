@@ -39,8 +39,8 @@ const Product = ({ location }) => {
         />
         <section className="text-gray-700 body-font">
           <div className="flex flex-wrap -m-4">
-            {nodes.map(product => {
-              return <ProductList data={product} />
+            {nodes.map((product, index) => {
+              return <ProductList index={index} data={product} />
             })}
           </div>
         </section>

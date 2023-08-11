@@ -42,9 +42,9 @@ const ArchiveBlog = () => {
         Latest Posts
       </h1>
       <main>
-        {nodes.map(blog => {
+        {nodes.map((blog, index) => {
           return (
-            <div className="py-4">
+            <div key={index} className="py-4">
               <h2 class="text-gray-900 text-xl font-extrabold leading-snug">
                 <Link to={blog.fields.slug} className="text-indigo-600">
                   {blog.frontmatter.title}

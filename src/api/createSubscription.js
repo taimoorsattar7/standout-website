@@ -2,27 +2,27 @@ import generator from "generate-password"
 import { format } from "date-fns"
 
 import { isSubscribed } from "../lib/isSubscribed"
-import { querySanity } from "../lib/querySanity"
 import { sendEmailSG } from "../lib/sendEmailSG"
-import { mutateSanity } from "../lib/sanity/mutateSanity"
+
+import { sanityCreate, sanityRequest } from "../lib/sanity/sanityActions"
 
 export default async function handler(req, res) {
   const email = req?.body?.email || req?.query?.email
-  const priceId = req?.body?.priceId || req?.query?.priceId
+  const stripePriceId = req?.body?.stripePriceId || req?.query?.stripePriceId
   const name = req?.body?.name || req?.query?.name
-  const priceRef = req?.body?.priceRef || req?.query?.priceRef
+  const sanityPriceId = req?.body?.sanityPriceId || req?.query?.sanityPriceId
   const redirectOrigin = req?.body?.redirectOrigin || req?.query?.redirectOrigin
 
   // Check if the subscription actually exist in Stripe
-  let isSubscribe = await isSubscribed(email, priceId)
+  let isSubscribe = await isSubscribed(email, stripePriceId)
 
   try {
     if (
-      typeof isSubscribe.cusid == "string" &&
-      typeof isSubscribe.subid == "string"
+      typeof isSubscribe?.cusid == "string" &&
+      typeof isSubscribe?.subid == "string"
     ) {
       // Query customer from Sanity Server
-      let cusData = await querySanity(`
+      let cusData = await sanityRequest(`
         *[_type =='customer' && email=="${email}"]
       `)
 
@@ -36,44 +36,41 @@ export default async function handler(req, res) {
       let cusRef = cusData[0]?._id ? cusData[0]?._id : isSubscribe.cusid
 
       // Define mutation request for Sanity
-      let mutationRequest = [
-        {
-          createIfNotExists: {
-            _id: cusRef,
-            _type: "customer",
-            email: email,
-            password: cusPassword,
-            name: name,
-            cusid: cusRef,
-          },
-        },
-        {
-          createIfNotExists: {
-            _type: "subscriptions",
-            _id: isSubscribe.subid,
-            customer: { _ref: cusRef, _type: "reference" },
-            price: { _ref: priceRef, _type: "reference" },
-            status: isSubscribe?.status,
-            cancel_at_period_end: isSubscribe.cancel_at_period_end,
-            canceled_at: isSubscribe?.canceled_at
-              ? format(new Date(isSubscribe?.canceled_at * 1000), "yyyy-MM-dd")
-              : "",
-            cancel_at: isSubscribe?.cancel_at
-              ? format(new Date(isSubscribe?.cancel_at * 1000), "yyyy-MM-dd")
-              : "",
-            start_date: isSubscribe.start_date
-              ? format(new Date(isSubscribe.start_date * 1000), "yyyy-MM-dd")
-              : "",
-            livemode: isSubscribe?.livemode,
-            subID: isSubscribe.subid,
-            title: `${email}`,
-          },
-        },
-      ]
 
-      let results = await mutateSanity(mutationRequest)
+      let cusSanity = await sanityCreate("createIfNotExists", {
+        _id: cusRef,
+        _type: "customer",
+        email: email,
+        password: cusPassword,
+        name: name,
+        cusid: cusRef,
+      })
 
-      if (typeof results.transactionId == "string") {
+      let subSanity = await sanityCreate("createIfNotExists", {
+        _type: "subscriptions",
+        _id: isSubscribe.subid,
+        customer: { _ref: cusRef, _type: "reference" },
+        price: { _ref: sanityPriceId, _type: "reference" },
+        status: isSubscribe?.status,
+        cancel_at_period_end: isSubscribe.cancel_at_period_end,
+        canceled_at: isSubscribe?.canceled_at
+          ? format(new Date(isSubscribe?.canceled_at * 1000), "yyyy-MM-dd")
+          : "",
+        cancel_at: isSubscribe?.cancel_at
+          ? format(new Date(isSubscribe?.cancel_at * 1000), "yyyy-MM-dd")
+          : "",
+        start_date: isSubscribe.start_date
+          ? format(new Date(isSubscribe.start_date * 1000), "yyyy-MM-dd")
+          : "",
+        livemode: isSubscribe?.livemode,
+        subID: isSubscribe.subid,
+        title: `${email}`,
+      })
+
+      if (
+        typeof cusSanity?._id == "string" &&
+        typeof subSanity?._id == "string"
+      ) {
         try {
           // Send email to customer for their login details
           await sendEmailSG({

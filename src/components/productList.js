@@ -6,9 +6,10 @@ import { Link } from "gatsby"
 
 import PortableText from "@components/portabletext/portableText"
 
-export default function ProductList({ data }) {
+export default function ProductList({ data, index }) {
+  const image = getImage(data.image.asset)
   return (
-    <div className="p-4 md:w-2/4">
+    <div key={index} className="p-4 md:w-2/4">
       <section className="flex flex-col justify-center antialiased">
         <div className="h-full">
           <div className="max-w-xs mx-auto">
@@ -18,11 +19,7 @@ export default function ProductList({ data }) {
                 to={`/modules/${data.slug.current}`}
               >
                 <figure className="relative h-0 pb-[56.25%] overflow-hidden">
-                  <GatsbyImage
-                    className="absolute inset-0 object-cover w-full h-full transition duration-700 ease-out transform hover:scale-105"
-                    image={getImage(data.image.asset)}
-                    alt={"heading"}
-                  />
+                  <GatsbyImage image={image} alt={"image"} />
                 </figure>
               </Link>
               <div className="flex flex-col flex-grow p-5">
